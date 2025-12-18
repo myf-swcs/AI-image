@@ -30,11 +30,15 @@
             cursor: pointer;
             font-weight: 700;
             position: relative; /* For active state positioning */
+            touch-action: manipulation; /* 關鍵：消除手機上的 300ms 點擊延遲 */
+            -webkit-tap-highlight-color: transparent; /* 移除手機點擊時的灰色背景 */
+            user-select: none; /* 防止快速點擊時選取文字 */
         }
 
         .cartoon-btn:active {
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0px #000;
+            transition: none; /* 關鍵：按壓時無過渡，感覺更即時 */
         }
 
         .cartoon-btn.selected {
@@ -212,6 +216,7 @@
         lucide.createIcons();
 
         // 選項資料庫 (繁中標籤 -> 英文 Prompt)
+        // [更新] 已移除具有特定版權的名稱（如迪士尼、皮克斯、吉卜力、樂高），改為通用風格描述
         const data = {
             character: [
                 { label: "可愛貓咪", value: "cute fluffy cat" },
@@ -237,14 +242,14 @@
                 { label: "極簡背景", value: "simple solid color background" }
             ],
             style: [
-                { label: "3D 皮克斯", value: "3d disney pixar style, c4d render" },
-                { label: "吉卜力動畫", value: "studio ghibli anime style" },
+                { label: "3D 卡通", value: "3d cute cartoon style, c4d render" }, // 原: 3D 皮克斯
+                { label: "日系動畫", value: "japanese anime style, detailed background" }, // 原: 吉卜力動畫
                 { label: "水彩畫", value: "watercolor painting, artistic" },
                 { label: "油畫", value: "oil painting style, impasto strokes" },
                 { label: "像素風", value: "pixel art, 8-bit" },
                 { label: "賽博龐克", value: "cyberpunk vivid neon style" },
                 { label: "線條插畫", value: "clean line art, minimalist illustration" },
-                { label: "樂高風格", value: "lego brick style" },
+                { label: "積木風格", value: "toy brick style, construction toy" }, // 原: 樂高風格
                 { label: "黏土定格", value: "claymation style, stop motion look" }
             ],
             effect: [
