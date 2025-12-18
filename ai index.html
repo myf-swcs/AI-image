@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡通 Prompt 生成器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
+            background-color: #FFDEE9;
+            background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+            min-height: 100vh;
+        }
+
+        /* 卡通風格的陰影和邊框 */
+        .cartoon-box {
+            background-color: white;
+            border: 3px solid #000;
+            box-shadow: 6px 6px 0px #000;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .cartoon-btn {
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            font-weight: 700;
+            position: relative; /* For active state positioning */
+        }
+
+        .cartoon-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .cartoon-btn.selected {
+            background-color: #FCD34D; /* Amber-300 */
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+            border-color: #000;
+        }
+
+        /* 自定義輸入框樣式 */
+        .cartoon-input {
+            border: 3px solid #000;
+            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+        }
+        .cartoon-input:focus {
+            outline: none;
+            background-color: #FFFBEB; /* Yellow-50 */
+        }
+
+        /* 類別標題樣式 */
+        .category-title {
+            text-shadow: 2px 2px 0px #000;
+            -webkit-text-stroke: 1px #000; 
+            color: #fff;
+        }
+
+        /* 滾動條美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #000; 
+            border-radius: 4px;
+        }
+        
+        /* 彈出提示動畫 */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .toast-enter {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center">
+
+    <!-- 標題區域 -->
+    <header class="text-center mb-8 relative z-10">
+        <h1 class="text-4xl md:text-6xl font-black text-yellow-400 tracking-wider category-title drop-shadow-xl transform -rotate-2">
+            AI 繪圖魔法師
+        </h1>
+        <p class="mt-2 text-black font-bold text-lg bg-white inline-block px-4 py-1 border-2 border-black rounded-full shadow-[4px_4px_0px_#000]">
+            ✨ 點擊選項，一鍵生成 Prompt！
+        </p>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側：選項區 -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- 1. 人物 Character -->
+            <div class="cartoon-box rounded-2xl p-5 bg-blue-100">
+                <h2 class="text-xl font-black mb-3 flex items-center gap-2">
+                    <i data-lucide="user" class="w-6 h-6"></i> 選擇主角 (Character)
+                </h2>
+                <div class="flex flex-wrap gap-3" id="group-character">
+                    <!-- JS will populate buttons -->
+                </div>
+            </div>
+
+            <!-- 2. 場景 Background -->
+            <div class="cartoon-box rounded-2xl p-5 bg-green-100">
+                <h2 class="text-xl font-black mb-3 flex items-center gap-2">
+                    <i data-lucide="map" class="w-6 h-6"></i> 選擇場景 (Background)
+                </h2>
+                <div class="flex flex-wrap gap-3" id="group-scene">
+                    <!-- JS will populate buttons -->
+                </div>
+            </div>
+
+             <!-- 3. 風格 Style -->
+             <div class="cartoon-box rounded-2xl p-5 bg-pink-100">
+                <h2 class="text-xl font-black mb-3 flex items-center gap-2">
+                    <i data-lucide="palette" class="w-6 h-6"></i> 藝術風格 (Style)
+                </h2>
+                <div class="flex flex-wrap gap-3" id="group-style">
+                    <!-- JS will populate buttons -->
+                </div>
+            </div>
+
+            <!-- 4. 氛圍與光影 Lighting & Mood -->
+            <div class="cartoon-box rounded-2xl p-5 bg-purple-100">
+                <h2 class="text-xl font-black mb-3 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i> 氛圍特效 (Effects)
+                </h2>
+                <div class="flex flex-wrap gap-3" id="group-effect">
+                    <!-- JS will populate buttons -->
+                </div>
+            </div>
+
+            <!-- 5. [新功能] 額外描述 Custom Description -->
+            <div class="cartoon-box rounded-2xl p-5 bg-yellow-100">
+                <h2 class="text-xl font-black mb-3 flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-6 h-6"></i> 額外描述 (Custom)
+                </h2>
+                <p class="text-sm font-bold text-gray-600 mb-2">想加點特別的細節嗎？寫在這裡（建議用英文）：</p>
+                <input type="text" id="custom-input" placeholder="例如：wearing red hat, holding a book..." 
+                    oninput="updatePrompt()"
+                    class="cartoon-input w-full p-3 rounded-xl text-lg text-gray-800 placeholder-gray-400">
+            </div>
+
+        </div>
+
+        <!-- 右側：結果與操作區 (Sticky on Desktop) -->
+        <div class="lg:col-span-4 lg:sticky lg:top-8 h-fit space-y-4">
+            
+            <!-- 結果顯示框 -->
+            <div class="cartoon-box rounded-2xl p-5 bg-white relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-4 bg-stripes opacity-20"></div>
+                
+                <h3 class="text-lg font-black mb-2 text-gray-700">生成的提示詞 (Prompt):</h3>
+                
+                <textarea id="prompt-output" readonly 
+                    class="w-full h-48 p-4 border-2 border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:border-black resize-none font-mono text-sm leading-relaxed text-gray-700 shadow-inner"
+                ></textarea>
+
+                <div class="mt-4 flex flex-col gap-3">
+                    <button onclick="copyPrompt()" class="cartoon-btn w-full bg-yellow-400 hover:bg-yellow-300 text-black py-3 rounded-xl text-xl flex items-center justify-center gap-2">
+                        <i data-lucide="copy"></i> 複製提示詞
+                    </button>
+                    
+                    <button onclick="randomize()" class="cartoon-btn w-full bg-white hover:bg-gray-50 text-black py-2 rounded-xl text-lg flex items-center justify-center gap-2">
+                        <i data-lucide="shuffle"></i> 隨機生成
+                    </button>
+
+                    <button onclick="clearAll()" class="cartoon-btn w-full bg-red-400 hover:bg-red-300 text-white py-2 rounded-xl text-lg flex items-center justify-center gap-2">
+                        <i data-lucide="trash-2"></i> 清除重選
+                    </button>
+                </div>
+            </div>
+
+            <!-- [新功能] Copilot 連結按鈕 -->
+            <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer" 
+               class="cartoon-btn w-full bg-blue-500 hover:bg-blue-400 text-white py-4 rounded-xl text-xl flex items-center justify-center gap-2 no-underline">
+                <i data-lucide="external-link"></i> 前往 Copilot 生成圖片
+            </a>
+
+            <!-- 小提示卡片 -->
+            <div class="cartoon-box rounded-xl p-4 bg-orange-50 text-sm font-bold text-gray-600 border-dashed border-2 border-gray-400 box-shadow-none">
+                <p>💡 提示：複製提示詞後，點擊藍色按鈕前往 Copilot，貼上並傳送即可！</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 複製成功的 Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden z-50">
+        <div class="bg-black text-white px-6 py-3 rounded-full font-bold text-lg shadow-[4px_4px_0px_#fff] flex items-center gap-2 border-2 border-white">
+            <i data-lucide="check-circle" class="text-green-400"></i>
+            已複製到剪貼簿！
+        </div>
+    </div>
+
+    <script>
+        // 初始化圖標
+        lucide.createIcons();
+
+        // 選項資料庫 (繁中標籤 -> 英文 Prompt)
+        const data = {
+            character: [
+                { label: "可愛貓咪", value: "cute fluffy cat" },
+                { label: "柴犬", value: "shiba inu dog" },
+                { label: "小女孩", value: "little girl" },
+                { label: "機器人", value: "futuristic cute robot" },
+                { label: "太空人", value: "astronaut" },
+                { label: "巫師", value: "wizard" },
+                { label: "超級英雄", value: "superhero" },
+                { label: "熊貓", value: "panda" },
+                { label: "獨角獸", value: "unicorn" },
+                { label: "上班族", value: "office worker" }
+            ],
+            scene: [
+                { label: "魔法森林", value: "enchanted magical forest" },
+                { label: "賽博城市", value: "cyberpunk city street at night" },
+                { label: "陽光海灘", value: "sunny tropical beach" },
+                { label: "溫馨臥室", value: "cozy bedroom with warm light" },
+                { label: "外太空", value: "outer space with galaxy background" },
+                { label: "咖啡廳", value: "modern coffee shop" },
+                { label: "古代城堡", value: "ancient fantasy castle" },
+                { label: "海底世界", value: "underwater coral reef" },
+                { label: "極簡背景", value: "simple solid color background" }
+            ],
+            style: [
+                { label: "3D 皮克斯", value: "3d disney pixar style, c4d render" },
+                { label: "吉卜力動畫", value: "studio ghibli anime style" },
+                { label: "水彩畫", value: "watercolor painting, artistic" },
+                { label: "油畫", value: "oil painting style, impasto strokes" },
+                { label: "像素風", value: "pixel art, 8-bit" },
+                { label: "賽博龐克", value: "cyberpunk vivid neon style" },
+                { label: "線條插畫", value: "clean line art, minimalist illustration" },
+                { label: "樂高風格", value: "lego brick style" },
+                { label: "黏土定格", value: "claymation style, stop motion look" }
+            ],
+            effect: [
+                { label: "柔和光線", value: "soft lighting, cinematic lighting" },
+                { label: "霓虹光", value: "neon glow lights" },
+                { label: "細節豐富", value: "highly detailed, 8k resolution" },
+                { label: "廣角鏡頭", value: "wide angle lens" },
+                { label: "夢幻模糊", value: "dreamy bokeh background" },
+                { label: "鮮豔色彩", value: "vibrant vivid colors" }
+            ]
+        };
+
+        // 當前選擇狀態
+        let currentSelection = {
+            character: null,
+            scene: null,
+            style: null,
+            effect: [] // Effect 可以多選
+        };
+
+        // 初始化渲染按鈕
+        function init() {
+            renderButtons('group-character', data.character, 'character');
+            renderButtons('group-scene', data.scene, 'scene');
+            renderButtons('group-style', data.style, 'style');
+            renderButtons('group-effect', data.effect, 'effect', true); // 多選
+            updatePrompt();
+        }
+
+        // 渲染按鈕函數
+        function renderButtons(containerId, items, category, isMulti = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `cartoon-btn bg-white px-4 py-2 rounded-lg text-sm md:text-base hover:bg-gray-50 text-gray-800`;
+                btn.innerText = item.label;
+                btn.onclick = () => handleSelect(category, item.value, btn, isMulti);
+                btn.dataset.value = item.value; // 存儲值以便隨機選擇使用
+                container.appendChild(btn);
+            });
+        }
+
+        // 處理點擊事件
+        function handleSelect(category, value, btnElement, isMulti) {
+            const container = btnElement.parentElement;
+            
+            if (isMulti) {
+                // 多選邏輯 (Effect)
+                const index = currentSelection[category].indexOf(value);
+                if (index > -1) {
+                    currentSelection[category].splice(index, 1);
+                    btnElement.classList.remove('selected');
+                } else {
+                    currentSelection[category].push(value);
+                    btnElement.classList.add('selected');
+                }
+            } else {
+                // 單選邏輯
+                // 移除同組其他按鈕的選中狀態
+                Array.from(container.children).forEach(child => child.classList.remove('selected'));
+                
+                if (currentSelection[category] === value) {
+                    // 如果點擊已選中的，取消選擇
+                    currentSelection[category] = null;
+                } else {
+                    // 選擇新的
+                    currentSelection[category] = value;
+                    btnElement.classList.add('selected');
+                }
+            }
+            updatePrompt();
+        }
+
+        // 更新提示詞顯示
+        function updatePrompt() {
+            const parts = [];
+            
+            // [新功能] 0. 固定前綴
+            parts.push("create an image");
+
+            // 1. 風格 (通常放在前面定義整體基調)
+            if (currentSelection.style) parts.push(currentSelection.style);
+            
+            // 2. 主體 (人物)
+            if (currentSelection.character) parts.push(currentSelection.character);
+            
+            // 3. 場景
+            if (currentSelection.scene) parts.push(`in ${currentSelection.scene}`);
+            
+            // 4. 特效/修飾詞
+            if (currentSelection.effect.length > 0) {
+                parts.push(currentSelection.effect.join(", "));
+            }
+
+            // [新功能] 5. 額外描述
+            const customInput = document.getElementById('custom-input').value.trim();
+            if (customInput) {
+                parts.push(customInput);
+            }
+
+            // 添加一些默認的高質量詞彙
+            // 如果只有前綴，就不加 masterpiece，避免空內容只有品質詞
+            if (parts.length > 1) {
+                parts.push("masterpiece, best quality");
+            }
+
+            // 如果只有 "create an image"，顯示提示文字
+            const promptText = parts.length > 1 ? parts.join(", ") : "create an image... (請選擇選項)";
+            document.getElementById('prompt-output').value = promptText;
+        }
+
+        // 複製功能
+        function copyPrompt() {
+            const textArea = document.getElementById('prompt-output');
+            const text = textArea.value;
+            
+            if (!text || text.includes("(請選擇選項)")) return;
+
+            // 使用 execCommand 作為 iframe 環境中最安全的 fallback
+            textArea.select();
+            document.execCommand('copy');
+            
+            // 顯示 Toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            toast.classList.add('toast-enter');
+            
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
+        // 清除所有選擇
+        function clearAll() {
+            currentSelection = { character: null, scene: null, style: null, effect: [] };
+            document.querySelectorAll('.cartoon-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('custom-input').value = ""; // 清除輸入框
+            updatePrompt();
+        }
+
+        // 隨機生成
+        function randomize() {
+            // 清除現有視覺狀態
+            clearAll(); 
+
+            // 隨機選擇 Character
+            const randChar = data.character[Math.floor(Math.random() * data.character.length)];
+            currentSelection.character = randChar.value;
+            selectButtonByValue('group-character', randChar.value);
+
+            // 隨機選擇 Scene
+            const randScene = data.scene[Math.floor(Math.random() * data.scene.length)];
+            currentSelection.scene = randScene.value;
+            selectButtonByValue('group-scene', randScene.value);
+
+            // 隨機選擇 Style
+            const randStyle = data.style[Math.floor(Math.random() * data.style.length)];
+            currentSelection.style = randStyle.value;
+            selectButtonByValue('group-style', randStyle.value);
+
+            // 隨機選擇 1-2 個 Effect
+            const numEffects = Math.floor(Math.random() * 2) + 1;
+            for(let i=0; i<numEffects; i++) {
+                const randEffect = data.effect[Math.floor(Math.random() * data.effect.length)];
+                if(!currentSelection.effect.includes(randEffect.value)) {
+                    currentSelection.effect.push(randEffect.value);
+                    selectButtonByValue('group-effect', randEffect.value);
+                }
+            }
+
+            updatePrompt();
+        }
+
+        // 輔助函數：根據值選中按鈕 UI
+        function selectButtonByValue(groupId, value) {
+            const container = document.getElementById(groupId);
+            const buttons = container.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if(btn.dataset.value === value) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+
+        // 啟動
+        init();
+
+    </script>
+</body>
+</html>
