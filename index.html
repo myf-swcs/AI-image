@@ -7,8 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
- 
- <style>
+    <style>
         body {
             font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
             background-color: #FFDEE9;
@@ -30,16 +29,16 @@
             transition: all 0.1s ease;
             cursor: pointer;
             font-weight: 700;
-            position: relative; /* For active state positioning */
-            touch-action: manipulation; /* 關鍵：消除手機上的 300ms 點擊延遲 */
-            -webkit-tap-highlight-color: transparent; /* 移除手機點擊時的灰色背景 */
-            user-select: none; /* 防止快速點擊時選取文字 */
+            position: relative;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .cartoon-btn:active {
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0px #000;
-            transition: none; /* 關鍵：按壓時無過渡，感覺更即時 */
+            transition: none;
         }
 
         .cartoon-btn.selected {
@@ -57,7 +56,7 @@
         }
         .cartoon-input:focus {
             outline: none;
-            background-color: #FFFBEB; /* Yellow-50 */
+            background-color: #FFFBEB;
         }
 
         /* 類別標題樣式 */
@@ -90,23 +89,33 @@
         .toast-enter {
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+
+        /* 導航按鈕跳動特效 */
+        .nav-btn {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
     </style>
 </head>
-<body class="p-4 md:p-8 flex flex-col items-center relative">
-
-    <!-- [新增] 連結至 page.html (AI 使用說明書) -->
-    <a href="page.html" class="absolute top-4 right-4 cartoon-btn bg-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-gray-100 z-50 no-underline text-black">
-        <i data-lucide="book-open" class="w-4 h-4"></i> AI 使用說明書
-    </a>
+<body class="p-4 md:p-8 flex flex-col items-center">
 
     <!-- 標題區域 -->
-    <header class="text-center mb-8 relative z-10">
+    <header class="text-center mb-8 relative z-10 flex flex-col items-center gap-3">
         <h1 class="text-4xl md:text-6xl font-black text-yellow-400 tracking-wider category-title drop-shadow-xl transform -rotate-2">
             AI 繪圖魔法師
         </h1>
-        <p class="mt-2 text-black font-bold text-lg bg-white inline-block px-4 py-1 border-2 border-black rounded-full shadow-[4px_4px_0px_#000]">
+        <p class="text-black font-bold text-lg bg-white inline-block px-4 py-1 border-2 border-black rounded-full shadow-[4px_4px_0px_#000]">
             ✨ 點擊選項，一鍵生成 Prompt！
         </p>
+
+        <!-- 連結按鈕 -->
+        <a href="page2.html" class="nav-btn mt-2 no-underline text-black font-black text-lg bg-green-400 hover:bg-green-300 inline-flex items-center gap-2 px-6 py-2 border-2 border-black rounded-full shadow-[4px_4px_0px_#000] hover:translate-y-1 hover:shadow-[2px_2px_0px_#000] transition-all">
+            <i data-lucide="book-open"></i>
+            前往 AI 使用說明書 (page 2)
+        </a>
     </header>
 
     <!-- 主要內容區 -->
@@ -155,7 +164,7 @@
                 </div>
             </div>
 
-            <!-- 5. [新功能] 額外描述 Custom Description -->
+            <!-- 5. 額外描述 Custom Description -->
             <div class="cartoon-box rounded-2xl p-5 bg-yellow-100">
                 <h2 class="text-xl font-black mb-3 flex items-center gap-2">
                     <i data-lucide="edit-3" class="w-6 h-6"></i> 額外描述 (Custom)
@@ -196,7 +205,7 @@
                 </div>
             </div>
 
-            <!-- [新功能] Copilot 連結按鈕 -->
+            <!-- Copilot 連結按鈕 -->
             <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer" 
                class="cartoon-btn w-full bg-blue-500 hover:bg-blue-400 text-white py-4 rounded-xl text-xl flex items-center justify-center gap-2 no-underline">
                 <i data-lucide="external-link"></i> 前往 Copilot 生成圖片
@@ -221,13 +230,12 @@
         // 初始化圖標
         lucide.createIcons();
 
-        // 選項資料庫 (繁中標籤 -> 英文 Prompt)
-        // [更新] 已移除具有特定版權的名稱（如迪士尼、皮克斯、吉卜力、樂高），改為通用風格描述
+        // 選項資料庫
         const data = {
             character: [
-                { label: "機師", value: "airline pilot in uniform" }, // 新增
-                { label: "客機", value: "commercial airplane" }, // 新增
-                { label: "戰鬥機", value: "fighter jet" }, // 新增
+                { label: "機師", value: "airline pilot in uniform" },
+                { label: "客機", value: "commercial airplane" },
+                { label: "戰鬥機", value: "fighter jet" },
                 { label: "可愛貓咪", value: "cute fluffy cat" },
                 { label: "柴犬", value: "shiba inu dog" },
                 { label: "小女孩", value: "little girl" },
@@ -239,10 +247,10 @@
                 { label: "獨角獸", value: "unicorn" }
             ],
             scene: [
-                { label: "機場跑道", value: "airport runway at sunset" }, // 新增
-                { label: "國際機場", value: "busy international airport terminal" }, // 新增
-                { label: "高空雲端", value: "high in the sky above clouds" }, // 新增
-                { label: "飛機機艙", value: "inside airplane cabin" }, // 新增
+                { label: "機場跑道", value: "airport runway at sunset" },
+                { label: "國際機場", value: "busy international airport terminal" },
+                { label: "高空雲端", value: "high in the sky above clouds" },
+                { label: "飛機機艙", value: "inside airplane cabin" },
                 { label: "魔法森林", value: "enchanted magical forest" },
                 { label: "賽博城市", value: "cyberpunk city street at night" },
                 { label: "陽光海灘", value: "sunny tropical beach" },
@@ -279,7 +287,7 @@
             character: null,
             scene: null,
             style: null,
-            effect: [] // Effect 可以多選
+            effect: []
         };
 
         // 初始化渲染按鈕
@@ -287,7 +295,7 @@
             renderButtons('group-character', data.character, 'character');
             renderButtons('group-scene', data.scene, 'scene');
             renderButtons('group-style', data.style, 'style');
-            renderButtons('group-effect', data.effect, 'effect', true); // 多選
+            renderButtons('group-effect', data.effect, 'effect', true);
             updatePrompt();
         }
 
@@ -301,7 +309,7 @@
                 btn.className = `cartoon-btn bg-white px-4 py-2 rounded-lg text-sm md:text-base hover:bg-gray-50 text-gray-800`;
                 btn.innerText = item.label;
                 btn.onclick = () => handleSelect(category, item.value, btn, isMulti);
-                btn.dataset.value = item.value; // 存儲值以便隨機選擇使用
+                btn.dataset.value = item.value;
                 container.appendChild(btn);
             });
         }
@@ -322,14 +330,11 @@
                 }
             } else {
                 // 單選邏輯
-                // 移除同組其他按鈕的選中狀態
                 Array.from(container.children).forEach(child => child.classList.remove('selected'));
                 
                 if (currentSelection[category] === value) {
-                    // 如果點擊已選中的，取消選擇
                     currentSelection[category] = null;
                 } else {
-                    // 選擇新的
                     currentSelection[category] = value;
                     btnElement.classList.add('selected');
                 }
@@ -340,37 +345,24 @@
         // 更新提示詞顯示
         function updatePrompt() {
             const parts = [];
-            
-            // [新功能] 0. 固定前綴
             parts.push("create an image");
 
-            // 1. 風格 (通常放在前面定義整體基調)
             if (currentSelection.style) parts.push(currentSelection.style);
-            
-            // 2. 主體 (人物)
             if (currentSelection.character) parts.push(currentSelection.character);
-            
-            // 3. 場景
             if (currentSelection.scene) parts.push(`in ${currentSelection.scene}`);
-            
-            // 4. 特效/修飾詞
             if (currentSelection.effect.length > 0) {
                 parts.push(currentSelection.effect.join(", "));
             }
 
-            // [新功能] 5. 額外描述
             const customInput = document.getElementById('custom-input').value.trim();
             if (customInput) {
                 parts.push(customInput);
             }
 
-            // 添加一些默認的高質量詞彙
-            // 如果只有前綴，就不加 masterpiece，避免空內容只有品質詞
             if (parts.length > 1) {
                 parts.push("masterpiece, best quality");
             }
 
-            // 如果只有 "create an image"，顯示提示文字
             const promptText = parts.length > 1 ? parts.join(", ") : "create an image... (請選擇選項)";
             document.getElementById('prompt-output').value = promptText;
         }
@@ -382,11 +374,9 @@
             
             if (!text || text.includes("(請選擇選項)")) return;
 
-            // 使用 execCommand 作為 iframe 環境中最安全的 fallback
             textArea.select();
             document.execCommand('copy');
             
-            // 顯示 Toast
             const toast = document.getElementById('toast');
             toast.classList.remove('hidden');
             toast.classList.add('toast-enter');
@@ -401,31 +391,26 @@
         function clearAll() {
             currentSelection = { character: null, scene: null, style: null, effect: [] };
             document.querySelectorAll('.cartoon-btn').forEach(btn => btn.classList.remove('selected'));
-            document.getElementById('custom-input').value = ""; // 清除輸入框
+            document.getElementById('custom-input').value = "";
             updatePrompt();
         }
 
         // 隨機生成
         function randomize() {
-            // 清除現有視覺狀態
             clearAll(); 
 
-            // 隨機選擇 Character
             const randChar = data.character[Math.floor(Math.random() * data.character.length)];
             currentSelection.character = randChar.value;
             selectButtonByValue('group-character', randChar.value);
 
-            // 隨機選擇 Scene
             const randScene = data.scene[Math.floor(Math.random() * data.scene.length)];
             currentSelection.scene = randScene.value;
             selectButtonByValue('group-scene', randScene.value);
 
-            // 隨機選擇 Style
             const randStyle = data.style[Math.floor(Math.random() * data.style.length)];
             currentSelection.style = randStyle.value;
             selectButtonByValue('group-style', randStyle.value);
 
-            // 隨機選擇 1-2 個 Effect
             const numEffects = Math.floor(Math.random() * 2) + 1;
             for(let i=0; i<numEffects; i++) {
                 const randEffect = data.effect[Math.floor(Math.random() * data.effect.length)];
@@ -438,7 +423,6 @@
             updatePrompt();
         }
 
-        // 輔助函數：根據值選中按鈕 UI
         function selectButtonByValue(groupId, value) {
             const container = document.getElementById(groupId);
             const buttons = container.querySelectorAll('button');
@@ -449,9 +433,7 @@
             });
         }
 
-        // 啟動
         init();
-
     </script>
 </body>
 </html>
