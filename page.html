@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 使用說明書：為什麼「怎麼說」很重要？</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
+            background-color: #f0fdf4; /* 淺綠色背景 */
+            background-image: radial-gradient(#86efac 20%, transparent 20%), radial-gradient(#fde047 20%, transparent 20%);
+            background-position: 0 0, 50px 50px;
+            background-size: 100px 100px;
+            min-height: 100vh;
+        }
+
+        /* 統一的卡通框樣式 */
+        .cartoon-box {
+            background-color: white;
+            border: 3px solid #000;
+            box-shadow: 6px 6px 0px #000;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        .cartoon-box:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 標題標籤 */
+        .title-badge {
+            background-color: #000;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: 900;
+            display: inline-block;
+            transform: rotate(-2deg);
+            margin-bottom: 1rem;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            font-size: 1.1rem;
+        }
+
+        .cartoon-btn {
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            font-weight: 700;
+            user-select: none;
+        }
+
+        .cartoon-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        /* 對話氣泡 */
+        .bubble {
+            position: relative;
+            background: #fff;
+            border: 3px solid #000;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        .bubble.left:after {
+            content: ''; position: absolute; left: 20px; bottom: -20px;
+            border: 10px solid transparent; border-top: 10px solid #000;
+        }
+        .bubble.left:before {
+            content: ''; position: absolute; left: 23px; bottom: -13px;
+            border: 7px solid transparent; border-top: 7px solid #fff; z-index: 1;
+        }
+
+        .highlight {
+            background-color: #fef08a;
+            padding: 0 6px;
+            border-radius: 4px;
+            display: inline-block;
+            transform: rotate(-1deg);
+        }
+
+        /* 關卡卡片 */
+        .level-card {
+            border: 2px solid #000;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: all 0.2s;
+            background: white;
+        }
+        .level-card:hover {
+            transform: scale(1.02);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center">
+
+    <div class="w-full max-w-4xl">
+        <!-- 頂部導航：回到主頁 (確保 href="index.html") -->
+        <a href="index.html" class="cartoon-btn inline-flex items-center gap-2 bg-yellow-400 px-6 py-3 rounded-full mb-8 text-lg hover:bg-yellow-300 no-underline text-black font-black transform hover:-rotate-1">
+            <i data-lucide="arrow-left" class="w-6 h-6"></i> 回到繪圖魔法師
+        </a>
+
+        <!-- 主標題區 -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-black text-black drop-shadow-lg mb-4 bg-white border-4 border-black inline-block p-4 rounded-2xl shadow-[8px_8px_0px_#000] rotate-1">
+                📖 AI 的使用說明書
+            </h1>
+            <br>
+            <p class="text-xl md:text-2xl font-bold text-gray-800 mt-4 bg-cyan-300 inline-block px-6 py-2 rounded-lg border-2 border-black rotate-[-1deg] shadow-[4px_4px_0px_#000]">
+                為什麼「怎麼說」很重要？
+            </p>
+        </header>
+
+        <!-- 第 1 課 -->
+        <section class="cartoon-box p-6 md:p-8 bg-blue-50">
+            <div class="title-badge bg-blue-500 text-white border-2 border-black">第 1 課</div>
+            <h2 class="text-2xl md:text-3xl font-black mb-4 flex items-center gap-2">
+                什麼是 Prompt (提示詞)？ <span class="text-3xl">🤔</span>
+            </h2>
+            
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1 text-lg leading-relaxed font-medium text-gray-800 space-y-4">
+                    <p>
+                        小朋友，雖然 AI 像是個超級天才，但它有一個很大的弱點：
+                        <br><span class="text-red-500 font-black text-2xl inline-block mt-1 transform -rotate-1">它不會讀心術！ 🚫🧠</span>
+                    </p>
+                    <p>
+                        它不知道你心裡在想什麼，除非你清楚地告訴它。
+                        我們跟 AI 說的話，寫給它的指令，就叫做 <span class="highlight font-black border-2 border-black text-black px-2 mx-1">Prompt</span>。
+                    </p>
+                    <div class="p-4 bg-yellow-100 border-2 border-dashed border-black rounded-xl">
+                        💡 你可以把它想像成啟動魔法的 <strong class="text-purple-600 text-2xl mx-1 font-black">「咒語」</strong>！
+                    </div>
+                </div>
+                <!-- 插圖區 -->
+                <div class="w-40 h-40 bg-white border-4 border-black rounded-full flex items-center justify-center text-7xl shadow-[6px_6px_0px_#000] animate-bounce">
+                    🧙‍♂️
+                </div>
+            </div>
+        </section>
+
+        <!-- 第 2 課 -->
+        <section class="cartoon-box p-6 md:p-8 bg-red-50">
+            <div class="title-badge bg-red-500 text-white border-2 border-black">第 2 課</div>
+            <h2 class="text-2xl md:text-3xl font-black mb-6">爛咒語 vs. 好咒語 (Bad vs. Good)</h2>
+            
+            <p class="text-xl mb-8 font-bold text-center bg-white border-2 border-black rounded-lg p-2 inline-block mx-auto shadow-[4px_4px_0px_#ccc]">
+                🍽️ 想像一下，你走進一家餐廳肚子很餓...
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 爛咒語 Case -->
+                <div class="border-3 border-black bg-white rounded-xl p-0 overflow-hidden shadow-[6px_6px_0px_#fda4af]">
+                    <div class="bg-red-200 p-3 border-b-2 border-black text-center font-black text-red-800">
+                        👎 爛咒語 (不清楚)
+                    </div>
+                    <div class="p-5">
+                        <div class="bubble left bg-gray-100 text-gray-800">
+                            你大喊：「我要吃東西！」😡
+                        </div>
+                        <div class="mt-8 space-y-2">
+                            <p class="font-bold text-gray-800">結果：</p>
+                            <p class="text-sm bg-red-100 p-2 rounded border border-red-300">
+                                老闆可能會給你一盤「苦瓜炒青椒」... 呃，這不是你要的吧？
+                            </p>
+                            <p class="text-xs text-gray-500 mt-2 font-bold">
+                                ❌ 為什麼？ 因為你沒說你要吃什麼，AI 只好隨便猜。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 好咒語 Case -->
+                <div class="border-3 border-black bg-white rounded-xl p-0 overflow-hidden shadow-[6px_6px_0px_#86efac]">
+                    <div class="bg-green-200 p-3 border-b-2 border-black text-center font-black text-green-800">
+                        👍 好咒語 (很清楚)
+                    </div>
+                    <div class="p-5">
+                        <div class="bubble left bg-yellow-100 text-gray-800">
+                            「老闆，我要一份剛烤好的、起司很多的、不要放青椒的夏威夷披薩！」🍕
+                        </div>
+                        <div class="mt-8 space-y-2">
+                            <p class="font-bold text-gray-800">結果：</p>
+                            <p class="text-sm bg-green-100 p-2 rounded border border-green-300">
+                                老闆端出了你最愛的披薩！
+                            </p>
+                            <p class="text-xs text-gray-500 mt-2 font-bold">
+                                ✅ 為什麼？ 因為你給了細節。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第 3 課 -->
+        <section class="cartoon-box p-6 md:p-8 bg-purple-50">
+            <div class="title-badge bg-purple-500 text-white border-2 border-black">第 3 課</div>
+            <h2 class="text-2xl md:text-3xl font-black mb-6">變身「咒語大師」的三個祕密 🗝️</h2>
+            
+            <p class="text-lg mb-6 font-bold text-gray-700">要讓 AI 乖乖聽話，畫出你想要的圖，你需要這三個祕密材料：</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <!-- 秘密 1 -->
+                <div class="bg-white p-4 border-2 border-black rounded-xl text-center shadow-[4px_4px_0px_#000] hover:bg-yellow-50">
+                    <div class="text-5xl mb-3">🐱</div>
+                    <h3 class="font-black text-lg mb-1">1. 主角是誰？</h3>
+                    <p class="text-sm text-gray-500 font-bold">(一隻貓？一個超人？)</p>
+                </div>
+                <!-- 秘密 2 -->
+                <div class="bg-white p-4 border-2 border-black rounded-xl text-center shadow-[4px_4px_0px_#000] hover:bg-yellow-50">
+                    <div class="text-5xl mb-3">💃</div>
+                    <h3 class="font-black text-lg mb-1">2. 在做什麼？</h3>
+                    <p class="text-sm text-gray-500 font-bold">(在跳舞？在吃麵？)</p>
+                </div>
+                <!-- 秘密 3 -->
+                <div class="bg-white p-4 border-2 border-black rounded-xl text-center shadow-[4px_4px_0px_#000] hover:bg-yellow-50">
+                    <div class="text-5xl mb-3">🎨</div>
+                    <h3 class="font-black text-lg mb-1">3. 是什麼風格？</h3>
+                    <p class="text-sm text-gray-500 font-bold">(卡通風？樂高風格？)</p>
+                </div>
+            </div>
+
+            <!-- 實戰演練 -->
+            <div class="bg-white border-2 border-black rounded-2xl p-6 shadow-inner bg-dots">
+                <h3 class="text-xl font-black text-center mb-6 flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles"></i> 讓我們來試試看！(範例展示)
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- Level 1 -->
+                    <div class="level-card bg-gray-50 p-4 flex flex-col md:flex-row gap-4 items-center opacity-80">
+                        <div class="w-full md:w-20 font-black text-center bg-gray-300 text-gray-700 rounded px-2 py-1 text-sm border border-gray-400">等級 1</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-gray-800">「畫一隻狗。」</p>
+                            <p class="text-sm text-gray-500 mt-1">👉 一隻普通的狗，站著發呆。 (太無聊了...)</p>
+                        </div>
+                        <div class="text-4xl grayscale">🐶</div>
+                    </div>
+
+                    <!-- Level 2 -->
+                    <div class="level-card bg-blue-50 p-4 flex flex-col md:flex-row gap-4 items-center">
+                        <div class="w-full md:w-20 font-black text-center bg-blue-400 text-white rounded px-2 py-1 text-sm border-2 border-blue-500">等級 2</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-blue-900">「畫一隻戴墨鏡的狗，在海邊衝浪。」</p>
+                            <p class="text-sm text-blue-600 mt-1">👉 喔！有點酷了！但還不夠精采。</p>
+                        </div>
+                        <div class="text-4xl">😎🏄</div>
+                    </div>
+
+                    <!-- Level 3 -->
+                    <div class="level-card bg-purple-50 p-4 flex flex-col md:flex-row gap-4 items-center border-2 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.2)] transform scale-105">
+                        <div class="w-full md:w-20 font-black text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded px-2 py-1 text-sm border-2 border-purple-700 shadow-sm">等級 3</div>
+                        <div class="flex-1">
+                            <p class="font-bold text-purple-900 text-lg">「畫一隻胖胖的柯基犬，戴著粉紅色墨鏡，在外太空騎著火箭衝浪，風格要像皮克斯動畫。」</p>
+                            <p class="text-sm text-purple-700 mt-1 font-bold">👉 哇！這就是我們想要的超級傑作！✨</p>
+                        </div>
+                        <div class="text-5xl animate-pulse">🚀✨</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重要的結論 -->
+        <section class="cartoon-box p-8 bg-yellow-400 text-center border-4 border-black">
+            <h2 class="text-3xl font-black mb-6 text-black">🏆 重要的結論</h2>
+            
+            <div class="bg-white border-2 border-black rounded-xl p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] inline-block w-full max-w-lg">
+                <p class="text-2xl font-black mb-6">
+                    AI 很強大，但 <span class="bg-black text-white px-2 py-1 transform -rotate-2 inline-block shadow-lg">你才是老闆！</span>
+                </p>
+                
+                <div class="space-y-4 text-left px-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="alert-triangle" class="text-red-500 w-6 h-6 flex-shrink-0"></i>
+                        <span class="font-bold text-gray-700 text-lg">如果你說得不清楚，AI 就會變笨。</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle-2" class="text-green-600 w-6 h-6 flex-shrink-0"></i>
+                        <span class="font-bold text-gray-700 text-lg">如果你說得很詳細，AI 就會變成神隊友。</span>
+                    </div>
+                </div>
+
+                <hr class="border-2 border-black border-dashed my-6">
+
+                <p class="font-black text-xl text-black">
+                    所以，學習 AI 最重要的一課，就是學會把話說清楚，發揮你的想像力！
+                </p>
+            </div>
+            
+            <div class="mt-8">
+                <!-- 底部大按鈕：回到主頁 (確保 href="index.html") -->
+                <a href="index.html" class="cartoon-btn inline-flex items-center justify-center gap-2 bg-black text-white text-xl px-10 py-4 rounded-full w-full md:w-auto hover:bg-gray-800 no-underline shadow-[4px_4px_0px_#fff] border-2 border-white">
+                    <i data-lucide="wand-2"></i> 我學會了！回去施展魔法
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 font-bold mb-8 text-sm">
+            <p>© 2024 AI 繪圖魔法師學院</p>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
