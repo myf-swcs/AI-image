@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
+ 
+ <style>
         body {
             font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
             background-color: #FFDEE9;
@@ -91,7 +92,12 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-8 flex flex-col items-center">
+<body class="p-4 md:p-8 flex flex-col items-center relative">
+
+    <!-- [新增] 連結至 page.html (AI 使用說明書) -->
+    <a href="page.html" class="absolute top-4 right-4 cartoon-btn bg-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-gray-100 z-50 no-underline text-black">
+        <i data-lucide="book-open" class="w-4 h-4"></i> AI 使用說明書
+    </a>
 
     <!-- 標題區域 -->
     <header class="text-center mb-8 relative z-10">
